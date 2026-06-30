@@ -1,13 +1,13 @@
 # requirements
 # Usage: pip install -r requirements.txt
-
+# Python version required: python<3.12,>=3.10
 # Base ------------------------------------------------------------------------
 gitpython
 ipython
 matplotlib>=3.2.2
-numpy>=1.18.5
+numpy>=1.18.5,<2.0.0
 opencv-python>=4.1.1
-Pillow>=7.1.2
+Pillow>=7.1.2,<=10.0.0
 psutil
 PyYAML>=5.3.1
 requests>=2.23.0
@@ -17,6 +17,7 @@ torch>=1.7.0
 torchvision>=0.8.1
 tqdm>=4.64.0
 # protobuf<=3.20.1
+# When developing on Windows, be sure to follow instructions on pytorch's website to download CUDA runtimes
 
 # Logging ---------------------------------------------------------------------
 tensorboard>=2.4.1

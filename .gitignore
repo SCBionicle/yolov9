@@ -1,0 +1,4 @@
+training/
+runs/
+*__pycache__
+*.venv
