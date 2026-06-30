@@ -220,7 +220,7 @@ def run(
 
             if npr == 0:
                 if nl:
-                    stats.append((correct, *torch.zeros((2, 0), device=device), labels[:, 0]))
+                    stats.append((correct.cpu(), *torch.zeros((2, 0)), labels[:, 0].cpu()))
                     if plots:
                         confusion_matrix.process_batch(detections=None, labels=labels[:, 0])
                 continue
@@ -239,7 +239,7 @@ def run(
                 correct = process_batch(predn, labelsn, iouv)
                 if plots:
                     confusion_matrix.process_batch(predn, labelsn)
-            stats.append((correct, pred[:, 4], pred[:, 5], labels[:, 0]))  # (correct, conf, pcls, tcls)
+            stats.append((correct.cpu(), pred[:, 4].cpu(), pred[:, 5].cpu(), labels[:, 0].cpu()))  # (correct, conf, pcls, tcls)
 
             # Save/log
             if save_txt:
@@ -254,9 +254,10 @@ def run(
             plot_images(im, output_to_target(preds), paths, save_dir / f'val_batch{batch_i}_pred.jpg', names)  # pred
 
         callbacks.run('on_val_batch_end', batch_i, im, targets, paths, shapes, preds)
+        del im, targets, preds, train_out
 
     # Compute metrics
-    stats = [torch.cat(x, 0).cpu().numpy() for x in zip(*stats)]  # to numpy
+    stats = [torch.cat(x, 0).numpy() for x in zip(*stats)]  # to numpy
     if len(stats) and stats[0].any():
         tp, fp, p, r, f1, ap, ap_class = ap_per_class(*stats, plot=plots, save_dir=save_dir, names=names)
         ap50, ap = ap[:, 0], ap.mean(1)  # AP@0.5, AP@0.5:0.95
